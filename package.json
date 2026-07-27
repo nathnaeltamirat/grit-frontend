@@ -2,6 +2,7 @@
   "scripts": {
     "dev": "vite",
     "lint" :"eslint",
+    "lint:fix": "eslint . --fix",
     "build": "tsc -b && vite build"
   
   },
@@ -14,9 +15,6 @@
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.83.0",
     "zod": "^4.4.3"
-  },
-  "overrides": {
-    "brace-expansion": "^5.0.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
