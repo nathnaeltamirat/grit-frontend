@@ -3,6 +3,7 @@
         "rootDir": "./src",
         "outDir": "./dist",
         "module": "nodenext",
+        "jsx": "react-jsx",
         "moduleResolution": "nodenext",
         "strict": true,
         "esModuleInterop": true,
