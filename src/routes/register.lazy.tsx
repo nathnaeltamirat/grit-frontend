@@ -42,7 +42,7 @@ function RegisterComponent() {
         <div className="hidden md:block flex-2 md:p-12">
           <div className="flex gap-2 items-center font-label w-fit p-2   rounded-4xl m-4 bg-[#2A2A2A] text-[#C4C7BE]">
             <CommandIcon className="w-4 h-4" />
-            VERSION 1.0.0
+            VERSION 1.0.0-beta
           </div>
           <h1 className="text-[#ffffff] text-5xl m-4 font-sans w-[90%]  ">
             Log the annoyance. Score the fix.
