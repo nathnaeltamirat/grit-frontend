@@ -1,15 +1,14 @@
 {
-    "compilerOptions":{
-        "rootDir": "./src",
-        "outDir": "./dist",
-        "module": "nodenext",
-        "jsx": "react-jsx",
-        "moduleResolution": "nodenext",
-        "strict": true,
-        "esModuleInterop": true,
-        "ignoreDeprecations": "6.0"
-
-    },
-    "exclude": ["node_modules"],
-    "include": ["src/**/*"]
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "es2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src/**/*"]
 }
