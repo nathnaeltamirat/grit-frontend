@@ -39,3 +39,9 @@ export async function loginRequest(payload: loginFormInput) {
 export async function fetchMe() {
   return apiFetch('/auth/me');
 }
+
+export async function logoutRequest() {
+  return apiFetch('/auth/logout', {
+    method: 'POST',
+  });
+}
