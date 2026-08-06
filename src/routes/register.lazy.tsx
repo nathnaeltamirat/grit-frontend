@@ -29,7 +29,7 @@ function RegisterComponent() {
       onSuccess: () => {
         reset();
         navigate({
-          to: '/login',
+          to: '/',
         });
       },
     });
