@@ -173,7 +173,7 @@ function RegisterComponent() {
               {signup.isPending ? (
                 <span className="flex justify-center items-center text-[#ffffff] gap-2">
                   <span className="w-4 h-4 border-2 border-t-transparent border-[#FFB4AB] rounded-full animate-spin"></span>
-                  Creating account ...
+                  Creating account...
                 </span>
               ) : (
                 'Create Account '
