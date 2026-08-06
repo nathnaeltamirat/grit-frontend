@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchMe, signUpRequest } from '../auth';
-
+import { fetchMe, loginRequest, signUpRequest } from '../auth';
 
 export function useSession() {
   return useQuery({
@@ -13,6 +12,7 @@ export function useSession() {
     refetchOnWindowFocus: false,
   });
 }
+
 export function useSignUp() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -21,5 +21,17 @@ export function useSignUp() {
       queryClient.invalidateQueries({
         queryKey: ['session'],
       }),
+  });
+}
+
+export function useLogin() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: loginRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['session'],
+      });
+    },
   });
 }
