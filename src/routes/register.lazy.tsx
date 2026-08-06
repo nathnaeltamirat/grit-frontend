@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { registerFormInput, registerSchema } from '../schema/auth.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSignUp } from '../api/hooks/useAuth';
-
+import { Link } from '@tanstack/react-router';
 export const Route = createLazyFileRoute('/register')({
   component: RegisterComponent,
 });
@@ -181,12 +181,12 @@ function RegisterComponent() {
             </button>
             <p className="my-10 text-center text-[#888888]">
               Alreay have an account?{' '}
-              <a
-                href=""
+              <Link
+                to="/login"
                 className="text-[#ffffff] hover:cursor-pointer font-semibold"
               >
                 Log in instead
-              </a>
+              </Link>
             </p>
           </form>
         </div>
