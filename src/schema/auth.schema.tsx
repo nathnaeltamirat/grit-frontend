@@ -11,4 +11,11 @@ export const registerSchema = z.object({
     }),
   password: z.string().min(8, 'Weak password'),
 });
+
+export const loginSchema = z.object({
+  email: z.string().trim().toLowerCase().pipe(z.email('Invalid Email')),
+  password: z.string().min(8, 'Weak password'),
+});
+
+export type loginFormInput = z.input<typeof loginSchema>;
 export type registerFormInput = z.input<typeof registerSchema>;
