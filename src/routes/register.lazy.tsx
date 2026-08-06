@@ -39,7 +39,7 @@ function RegisterComponent() {
     <>
       <div className="flex items-center font-sans flex-row bg-[#0E0E0E] w-full min-h-screen ">
         {/* Left side informative div */}
-        <div className="hidden md:block flex-2 md:p-12">
+        <div className="hidden md:block flex-1 md:p-12">
           <div className="flex gap-2 items-center font-label w-fit p-2   rounded-4xl m-4 bg-[#2A2A2A] text-[#C4C7BE]">
             <CommandIcon className="w-4 h-4" />
             VERSION 1.0.0-beta
@@ -82,7 +82,7 @@ function RegisterComponent() {
         </div>
         {/*Middle div*/}
         <div className="hidden md:block bg-[#3A3D3D] w-px self-stretch"></div>
-        <div className="flex-1 flex-col p-12 items-center">
+        <div className="flex-1  flex-col md:ml-24 p-12 items-center">
           <div className="flex flex-row items-center gap-2">
             <CheckCircleIcon className="w-12 h-8 text-[#FFB4AB]" />
             <h1 className="text-4xl font-bold text-[#ffffff]">Grit</h1>
@@ -94,7 +94,10 @@ function RegisterComponent() {
             Enter your details to capture friction and generate research
             insights.
           </p>
-          <form onSubmit={handleSubmit(submit)} className="my-8">
+          <form
+            onSubmit={handleSubmit(submit)}
+            className="my-8 w-full md:w-[80%]"
+          >
             <div className="flex flex-col gap-1">
               <label
                 className=" font-label text-[#888888] font-bold "
