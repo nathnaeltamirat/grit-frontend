@@ -7,17 +7,36 @@ import {
   LayoutDashboardIcon,
   LightbulbIcon,
   MenuIcon,
+  SearchIcon,
   SettingsIcon,
   SparkleIcon,
   XIcon,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useGetFriction } from '../api/hooks/useFriction';
 export const Route = createLazyFileRoute('/')({
   component: FrictionLogComponent,
 });
 
 function FrictionLogComponent() {
   const [navToggle, setNavToggle] = useState(false);
+  const [title, setTitle] = useState('');
+  const [page, setPage] = useState('1');
+  const [tags, setTags] = useState('');
+
+  const [searchParams, setSearchParams] = useState({
+    title: '',
+    page: '1',
+    tags: '',
+  });
+  const { data, isLoading, isError, error } = useGetFriction(searchParams);
+  const handleFetch = async () => {
+    setSearchParams({
+      title,
+      page,
+      tags,
+    });
+  };
   return (
     <div className="w-full min-h-screen font-sans bg-[#0e0e0e]">
       {/*Mobile view */}
@@ -140,6 +159,7 @@ function FrictionLogComponent() {
                     type="text"
                     className="h-8 focus:outline-none p-2 text-sm"
                     placeholder="FILTER BY TITLE..."
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
 
@@ -149,12 +169,24 @@ function FrictionLogComponent() {
                   <input
                     type="text"
                     className="h-8 focus:outline-none p-2 text-sm"
-                    placeholder="FILTER BY TAGS..."
+                    placeholder="TAGS SEPAEATE BY COMMA..."
+                    onChange={(e) => setTags(e.target.value)}
                   />
                 </div>
+                <button
+                  onClick={() => handleFetch()}
+                  className="flex hover:cursor-pointer h-10 px-4 gap-2 items-center justify-center rounded-sm bg-[#2A2A2A] text-white hover:bg-[#3A3A3A] transition-colors shrink-0"
+                >
+                  <span>Search</span>
+                  <SearchIcon className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </header>
+
+          <main>
+              {/*To Do*/}
+          </main>
         </div>
       </div>
     </div>
