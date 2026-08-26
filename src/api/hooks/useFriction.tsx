@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getFriction } from '../friction';
+import { FrictionLogResponse } from '../../routes/index.lazy';
 
 export function useGetFriction(params?: {
   title?: string;
@@ -13,7 +14,7 @@ export function useGetFriction(params?: {
   const queryString = searchParams.toString()
     ? `?${searchParams.toString()}`
     : '';
-  return useQuery({
+  return useQuery<FrictionLogResponse>({
     queryKey: ['friction',queryString],
     queryFn: async () => getFriction(queryString),
     refetchOnWindowFocus: false,
