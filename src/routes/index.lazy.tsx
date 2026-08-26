@@ -2,22 +2,165 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import '../index.css';
 import {
   CheckCircleIcon,
+  ChevronDown,
+  ChevronRight,
+  Edit2Icon,
   FilterIcon,
   HashIcon,
   LayoutDashboardIcon,
   LightbulbIcon,
+  LucideTrash2,
   MenuIcon,
   SearchIcon,
   SettingsIcon,
   SparkleIcon,
   XIcon,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useGetFriction } from '../api/hooks/useFriction';
 export const Route = createLazyFileRoute('/')({
   component: FrictionLogComponent,
 });
+export interface Tag {
+  id: string;
+  tag_name: string;
+  created_at: string;
+}
 
+export interface FrictionLog {
+  id: string;
+  title: string;
+  description: string;
+  severity: 'LOW' | 'MEDIUM' | 'CRITICAL';
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+  tags: Tag[];
+}
+
+export interface Pagination {
+  page: string;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+}
+
+export interface FrictionLogResponse {
+  success: boolean;
+  message: string;
+  data: FrictionLog[];
+  pagination: Pagination;
+}
+function FrictionCardComponent({ item }: { item: FrictionLog }) {
+  const textRef = useRef<HTMLParagraphElement | null>(null);
+  const date = new Date(item.created_at);
+  const [lightPercentage, setLightPercentage] = useState(100);
+  useLayoutEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const calculateLightRatio = () => {
+      const { clientHeight, scrollHeight } = el;
+      if (scrollHeight == 0) return;
+      const ratio = (clientHeight / scrollHeight) * 100;
+      setLightPercentage(Math.min(100, ratio));
+    };
+    calculateLightRatio();
+    const resizeObserver = new ResizeObserver(calculateLightRatio);
+    resizeObserver.observe(el);
+    return () => resizeObserver.disconnect();
+  }, [item.description]);
+  const [descriptionViewId, setDescriptionViwId] = useState<null | string>(
+    null,
+  );
+  return (
+    <div
+      key={item.id}
+      className="flex justify-content gap-4 m-8  p-4 border-[#3D4041] border"
+    >
+      {/*C7C6C6-light-gray  2A2A2A-darkgray */}
+      <div
+        className="w-2  rounded-lg"
+        style={{
+          background: `linear-gradient(to bottom, #C7C6C6 0% ${lightPercentage}%,#2A2A2A ${lightPercentage}% 100%)`,
+        }}
+      ></div>
+      <div className="flex flex-col w-full gap-3 justify-between">
+        <div className="w-full flex flex-wrap justify-between">
+          <h1 className=" font-semibold text-[#ffffff] text-lg">
+            {item.title}
+          </h1>
+          <div className="flex gap-8 text-sm flex-wrap  items-center">
+            {/*Edit*/}
+            <button className="flex gap-2 items-center">
+              <Edit2Icon className="text-[rgb(196,199,200)] w-4 h-8" />
+              <span className="text-[rgb(196,199,200)]">Edit</span>
+            </button>
+            <button className="flex gap-2 items-center">
+              <LucideTrash2 className="text-[rgb(196,199,200)] w-4 h-8" />
+              <span className="text-[rgb(196,199,200)]">Delete</span>
+            </button>
+            {lightPercentage < 100 &&
+              (descriptionViewId == item.id ? (
+                <ChevronDown
+                  onClick={() => setDescriptionViwId(null)}
+                  className=" text-[rgb(196,199,200)] w-4 h-8"
+                />
+              ) : (
+                <ChevronRight
+                  onClick={() => setDescriptionViwId(item.id)}
+                  className=" text-[rgb(196,199,200)] w-4 h-8"
+                />
+              ))}
+
+            <p className=" text-[rgb(196,199,200)] ">
+              {`${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })} | ${date.getDate()} ${date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}`}
+            </p>
+          </div>
+        </div>
+
+        <p
+          ref={textRef}
+          className={`text-md text-[rgb(196,199,200)] ${descriptionViewId != item.id && 'line-clamp-2'}  wrap-break`}
+        >
+          {item.description}
+        </p>
+        <div className="flex w-full items-center justify-between  flex-wrap">
+          {/*Tag div*/}
+          <div className="flex mb-3 flex-wrap gap-2">
+            {item.tags.map((tag: Tag) => {
+              return (
+                <div
+                  key={tag.id}
+                  className="border text-sm rounded-md px-2 py-1 text-[#C4C7C8] border-[#3D4041]"
+                >
+                  {tag.tag_name}
+                </div>
+              );
+            })}
+          </div>
+
+          {/*Severity */}
+          <div className="flex justify-between  items-center gap-2 ">
+            <span
+              className={` text-xs ${item.severity == 'CRITICAL' ? 'text-[#FFA575]' : 'text-[#C4C7C8]'}`}
+            >
+              SEVERITY: {item.severity}
+            </span>
+            <div
+              className={`w-3 h-1 rounded-2xl ${item.severity === 'CRITICAL' ? 'bg-[#FFA575]' : 'bg-[#C4C7C8]'}`}
+            ></div>
+            <div
+              className={`w-3 h-1 rounded-2xl ${item.severity === 'CRITICAL' ? 'bg-[#FFA575]' : item.severity === 'MEDIUM' ? 'bg-[#C4C7C8]' : 'bg-[#444748]'}`}
+            ></div>
+            <div
+              className={`w-3 h-1 rounded-2xl ${item.severity === 'CRITICAL' ? 'bg-[#FFA575]' : 'bg-[#444748]'}`}
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 function FrictionLogComponent() {
   const [navToggle, setNavToggle] = useState(false);
   const [title, setTitle] = useState('');
@@ -37,6 +180,8 @@ function FrictionLogComponent() {
       tags,
     });
   };
+  const [activeId, setActiveId] = useState<null | string>(null);
+
   return (
     <div className="w-full min-h-screen font-sans bg-[#0e0e0e]">
       {/*Mobile view */}
@@ -51,7 +196,7 @@ function FrictionLogComponent() {
         />
 
         <div className="flex flex-row p-2 py-4  items-center">
-          <CheckCircleIcon className="w-6 h-4 text-[#FFB4AB]" />
+          <CheckCircleIcon className="w-12 h-8 text-[#FFB4AB]" />
           <div className="flex flex-col">
             <h1 className="text-white  text-2xl font-semibold">Grit</h1>
             <p className="text-[#C4C7BE]">v1.0.0-beta</p>
@@ -184,8 +329,10 @@ function FrictionLogComponent() {
             </div>
           </header>
 
-          <main>
-              {/*To Do*/}
+          <main className="font-sans">
+            {data?.data?.map((item: FrictionLog) => {
+              return <FrictionCardComponent key={item.id} item={item} />;
+            })}
           </main>
         </div>
       </div>
