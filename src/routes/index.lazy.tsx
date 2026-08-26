@@ -91,11 +91,11 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
           </h1>
           <div className="flex gap-8 text-sm flex-wrap  items-center">
             {/*Edit*/}
-            <button className="flex gap-2 items-center">
+            <button className="flex gap-2 items-center hover:cursor-pointer">
               <Edit2Icon className="text-[rgb(196,199,200)] w-4 h-8" />
               <span className="text-[rgb(196,199,200)]">Edit</span>
             </button>
-            <button className="flex gap-2 items-center">
+            <button className="flex gap-2 items-center hover:cursor-pointer">
               <LucideTrash2 className="text-[rgb(196,199,200)] w-4 h-8" />
               <span className="text-[rgb(196,199,200)]">Delete</span>
             </button>
@@ -103,12 +103,12 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
               (descriptionViewId == item.id ? (
                 <ChevronDown
                   onClick={() => setDescriptionViwId(null)}
-                  className=" text-[rgb(196,199,200)] w-4 h-8"
+                  className=" text-[rgb(196,199,200)] w-4 h-8 hover:cursor-pointer"
                 />
               ) : (
                 <ChevronRight
                   onClick={() => setDescriptionViwId(item.id)}
-                  className=" text-[rgb(196,199,200)] w-4 h-8"
+                  className=" text-[rgb(196,199,200)] w-4 h-8 hover:cursor-pointer"
                 />
               ))}
 
@@ -188,20 +188,24 @@ function FrictionLogComponent() {
 
       {/* closed */}
       <aside
-        className={` ml-8 items-center  md:hidden ${navToggle ? 'hidden' : 'flex'}`}
+        className={` w-full bg-[#0e0e0e]   left-0  sticky flex-col top-0 z-40  md:hidden ${navToggle ? 'hidden' : 'flex'}`}
       >
-        <MenuIcon
-          onClick={() => setNavToggle((prev) => !prev)}
-          className="w-10 hover:cursor-pointer h-8 text-[#FFB4AB]"
-        />
+        <div className="flex flex-row py-3 items-center gap-4">
+          <MenuIcon
+            onClick={() => setNavToggle((prev) => !prev)}
+            className="w-10 hover:cursor-pointer h-8 text-[#FFB4AB]"
+          />
 
-        <div className="flex flex-row p-2 py-4  items-center">
-          <CheckCircleIcon className="w-12 h-8 text-[#FFB4AB]" />
-          <div className="flex flex-col">
-            <h1 className="text-white  text-2xl font-semibold">Grit</h1>
-            <p className="text-[#C4C7BE]">v1.0.0-beta</p>
+          <div className="flex flex-row p-2 py-4  items-center">
+            <CheckCircleIcon className="w-12 h-8 text-[#FFB4AB]" />
+            <div className="flex flex-col">
+              <h1 className="text-white  text-2xl font-semibold">Grit</h1>
+              <p className="text-[#C4C7BE]">v1.0.0-beta</p>
+            </div>
           </div>
         </div>
+
+        <div className=" bg-[#3A3D3D] w-full  h-px "></div>
       </aside>
       {/* Open */}
       <aside
@@ -219,6 +223,7 @@ function FrictionLogComponent() {
               className="w-10 ml-auto hover:cursor-pointer h-8 text-[#FFB4AB]"
             />
           </div>
+          <div className=" bg-[#3A3D3D] w-full  h-px "></div>
           <nav className="my-12  ">
             <Link
               to="/"
@@ -245,10 +250,9 @@ function FrictionLogComponent() {
         </div>
       </aside>
 
-      <div className="md:hidden bg-[#3A3D3D] w-full relative h-px "></div>
-      <div className="flex flex-row  ">
+      <div className="flex flex-row  min-h-screen">
         {/* Desktop view */}
-        <aside className="flex-1 flex md:block hidden flex-col">
+        <aside className="sticky top-0 w-64 h-screen md:block hidden flex-col">
           <div className="flex flex-row p-2 py-4  items-center">
             <CheckCircleIcon className="w-12 h-8 text-[#FFB4AB]" />
             <div className="flex flex-col">
@@ -282,7 +286,7 @@ function FrictionLogComponent() {
         </aside>
 
         <div className="hidden md:block bg-[#3A3D3D] w-px self-stretch"></div>
-        <div className="flex-4 text-white min-w-0 font-sans">
+        <div className="flex-1 text-white min-w-0 font-sans">
           <header className="m-8">
             <h1 className="text-2xl   font-semibold">Friction Feed</h1>
             <div className="flex gap-10 flex-wrap justify-between">
