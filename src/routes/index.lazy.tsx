@@ -1,7 +1,9 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import '../index.css';
 import {
+  AlertCircleIcon,
   CheckCircleIcon,
+  CheckIcon,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -19,8 +21,9 @@ import {
   XIcon,
 } from 'lucide-react';
 import { useLayoutEffect, useRef, useState } from 'react';
-import { useGetFriction } from '../api/hooks/useFriction';
+import { useGetFriction, useUpdateFriction } from '../api/hooks/useFriction';
 import FrictionSkeltonComponent from '../skeltons/FrictionCardSkelton';
+
 export const Route = createLazyFileRoute('/')({
   component: FrictionLogComponent,
 });
@@ -84,14 +87,17 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
   const [lightPercentage, setLightPercentage] = useState(100);
   const [titleValue, setTitleValue] = useState(item.title);
   const [tagValue, setTagValue] = useState('');
-  const [tags, setTags] = useState<string[] | null>(
-    item.tags.map((tag) => tag.tag_name),
+  const [tags, setTags] = useState(item.tags.map((tag) => tag.tag_name));
+  const [updateStatus, setUpdateStatus] = useState<'success' | 'error' | null>(
+    null,
   );
 
   const [severityValue, setSeverityValue] = useState<
     'LOW' | 'MEDIUM' | 'CRITICAL'
   >(item.severity);
-  const [descriptionViewId, setDescriptionView] = useState<string | null>(null);
+  const [descriptionViewId, setDescriptionViewId] = useState<string | null>(
+    null,
+  );
   const [descriptionValue, setDescriptionValue] = useState(item.description);
   useLayoutEffect(() => {
     const el = textRef.current;
@@ -126,9 +132,39 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
   const handleDiscard = () => {
     setUpdateId(null);
     setTitleValue(item.title);
+    setDescriptionViewId(null);
     setDescriptionValue(item.description);
     setTags(item.tags.map((tag) => tag.tag_name));
     setSeverityValue(item.severity);
+    setUpdateStatus(null);
+  };
+  const { mutate, error, isPending } = useUpdateFriction();
+  const handleSave = (id: string) => {
+    mutate(
+      {
+        id,
+        payLoad: {
+          title: titleValue,
+          description: descriptionValue,
+          severity: severityValue,
+          tags: tags,
+        },
+      },
+      {
+        onSuccess: () => {
+          setUpdateStatus('success');
+          setDescriptionViewId(null);
+          setTimeout(() => {
+         
+            setUpdateId(null);
+            setUpdateStatus(null);
+          }, 1200);
+        },
+        onError: () => {
+          setUpdateStatus('error');
+        },
+      },
+    );
   };
   return (
     <div
@@ -152,8 +188,9 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
           ) : (
             <input
               type="text"
-              className=" font-semibold text-[#ffffff] flex-1 min-w-0 mr-2  focus:outline-none px-2 py-1 border-2 border-[#444748] text-lg"
+              className=" placeholder:text-[#6E7172] font-semibold text-[#ffffff] flex-1 min-w-0 mr-2  focus:outline-none px-2 py-1 border-2 border-[#444748] text-lg"
               value={titleValue}
+              placeholder="ENTER TITLE..."
               onChange={(e) => setTitleValue(e.target.value)}
             />
           )}
@@ -179,13 +216,13 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
             {item.id != updateId &&
               (descriptionViewId == item.id ? (
                 <ChevronDown
-                  onClick={() => setDescriptionView(null)}
+                  onClick={() => setDescriptionViewId(null)}
                   className=" text-[rgb(196,199,200)] w-4 h-8 hover:cursor-pointer"
                 />
               ) : (
                 lightPercentage < 100 && (
                   <ChevronRight
-                    onClick={() => setDescriptionView(item.id)}
+                    onClick={() => setDescriptionViewId(item.id)}
                     className=" text-[rgb(196,199,200)] w-4 h-8 hover:cursor-pointer"
                   />
                 )
@@ -197,11 +234,24 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
           </div>
         </div>
         {item.id == updateId ? (
-          <div className=" px-3 py-3  border-t-2 border-t-[#444748] bg-[#2A2A2A]">
+          <div className=" px-3 py-3  border-t-2 border-t-[#444748] relative bg-[#2A2A2A]">
+            {updateStatus === "success" && (
+              <div className="mb-4 flex items-center justify-center gap-2  p-3 bg-emerald-950/80 border border-emerald-500/50 text-xs font-semibold rounded aminate-in fade-in slide-in-from-top-2 duration-200">
+                <CheckIcon className="w-4 h-4  text-emerald-400 shrink-0" />
+                <span>Friction Log updated successfully</span>
+              </div>
+            )}
+            {updateStatus === "error" && (
+              <div className="mb-4 flex items-center justify-center gap-2 p-3 bg-red-950/80 border border-red-500/50 text-xs font-semibold rounded aminate-in fade-in slide-in-from-top-2 duration-200">
+                <AlertCircleIcon className="w-4 h-4  text-red-400 shrink-0" />
+                <span>{error?.message}</span>
+              </div>
+            )}
             <p className="mt-3  my-2 text-white text-xs">DESCRIPTION</p>
             <textarea
-              className="w-full bg-[#1C1B1B] text-[#C4C7C8] flex-1 min-w-0 mr-2 overflow-y-hidden resize-none  focus:outline-none px-4 py-4 pb-6 border-2 border-[#444748] text-sm"
+              className="w-full bg-[#1C1B1B] placeholder:text-[#6E7172] text-[#C4C7C8] flex-1 min-w-0 mr-2 overflow-y-hidden resize-none  focus:outline-none px-4 py-4 pb-6 border-2 border-[#444748] text-sm"
               value={descriptionValue}
+              placeholder="ENTER DESCRIPTION ..."
               ref={textAreaRef}
               onChange={(e) => setDescriptionValue(e.target.value)}
             />
@@ -277,10 +327,11 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
                 DISCARD
               </button>
               <button
-                onClick={handleDiscard}
-                className={`w-fit hover:cursor-pointer m-1 min-w-0  p-3 border-2 border-[#444748] text-sm  bg-[#ffffff] rounded text-[#2F3131] `}
+                onClick={() => handleSave(item.id)}
+                disabled={isPending}
+                className={`w-fit hover:cursor-pointer m-1 min-w-0  p-3 border-2 border-[#444748] text-sm  bg-[#ffffff] rounded text-[#2F3131] ${isPending ? 'opacity-50  pointer-events-none cursor-not-allowed' : 'hover:border-slate-700 hover:bg-slate-50 hover:cursor-pointer active:scale-[0.98]'} `}
               >
-                SAVE CHANGES
+                {isPending ? 'Saving Changes...' : 'SAVE CHANGES'}
               </button>
             </div>
           </div>
@@ -345,8 +396,13 @@ function FrictionLogComponent() {
     page: '1',
     tags: '',
   });
-  const { data, isLoading, isError, error, refetch } =
-    useGetFriction(searchParams);
+  const {
+    data,
+    isLoading,
+    isError: isFetchingError,
+    error,
+    refetch,
+  } = useGetFriction(searchParams);
   const handleFetch = async (overRidePage?: string) => {
     setSearchParams({
       title,
@@ -354,7 +410,6 @@ function FrictionLogComponent() {
       tags,
     });
   };
-  const [activeId, setActiveId] = useState<null | string>(null);
 
   return (
     <div className="w-full min-h-screen font-sans bg-[#0e0e0e]">
@@ -510,7 +565,7 @@ function FrictionLogComponent() {
             Array.from({ length: 3 }).map((_, index) => (
               <FrictionSkeltonComponent key={index} />
             ))
-          ) : isError ? (
+          ) : isFetchingError ? (
             <div className="p-4 bg-red-950 border border-red-500 text-red-200 rounded">
               <p>Failed to load feed: {error?.message}</p>
               <button onClick={() => refetch()}>Try Again</button>
