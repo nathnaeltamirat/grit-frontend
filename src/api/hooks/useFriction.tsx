@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getFriction, updateFriction, updateFrictionParams } from '../friction';
+import {
+  createFriction,
+  getFriction,
+  payloadInput,
+  updateFriction,
+  updateFrictionParams,
+} from '../friction';
 import { FrictionLogResponse } from '../../routes/index.lazy';
 
 export function useGetFriction(params?: {
@@ -26,6 +32,18 @@ export function useUpdateFriction() {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, updateFrictionParams>({
     mutationFn: updateFriction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['friction'],
+        exact: false,
+      });
+    },
+  });
+}
+export function useCreateFriction() {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, payloadInput>({
+    mutationFn: createFriction,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['friction'],
