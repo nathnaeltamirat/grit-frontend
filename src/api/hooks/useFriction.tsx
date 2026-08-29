@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createFriction,
+  deleteFriction,
   getFriction,
   payloadInput,
   updateFriction,
@@ -44,6 +45,18 @@ export function useCreateFriction() {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, payloadInput>({
     mutationFn: createFriction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['friction'],
+        exact: false,
+      });
+    },
+  });
+}
+export function useDeleteFriction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteFriction,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['friction'],
