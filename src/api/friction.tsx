@@ -51,3 +51,16 @@ export async function createFriction(payload: payloadInput) {
     throw err;
   }
 }
+export async function deleteFriction(id:string){
+  try{
+    const data = await apiFetch(`/friction/${id}`,{
+      method:"DELETE"
+    })
+    return data;
+  }catch(err){
+    if(err instanceof ZodError){
+      throw new Error(err.issues.map((issue)=>issue.message).join(", "));
+    }
+    throw err
+  }
+}
