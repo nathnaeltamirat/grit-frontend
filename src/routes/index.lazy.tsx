@@ -147,7 +147,7 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
     setSeverityValue(item.severity);
     setUpdateStatus(null);
   };
-  const { mutate, error, isPending } = useUpdateFriction();
+  const { mutate, isPending } = useUpdateFriction();
   const handleSave = (id: string) => {
     mutate(
       {
@@ -264,7 +264,7 @@ function FrictionCardComponent({ item }: { item: FrictionLog }) {
             {updateStatus === 'error' && (
               <div className="mb-4 flex items-center justify-center gap-2 p-3 bg-red-950/80 border border-red-500/50 text-xs font-semibold rounded animate-in fade-in slide-in-from-top-2 duration-200">
                 <AlertCircleIcon className="w-4 h-4  text-red-400 shrink-0" />
-                <span>{error?.message}</span>
+                <span>Unable to update Try Again</span>
               </div>
             )}
             <p className="mt-3  my-2 text-white text-xs">DESCRIPTION</p>
@@ -444,7 +444,7 @@ function CreateFrictionComponent({ onClose }: { onClose: () => void }) {
     setUpdateStatus(null);
     onClose();
   };
-  const { mutate, error, isPending } = useCreateFriction();
+  const { mutate, isPending } = useCreateFriction();
   const handleSave = () => {
     mutate(
       {
@@ -578,7 +578,7 @@ function CreateFrictionComponent({ onClose }: { onClose: () => void }) {
           {updateStatus === 'error' && (
             <div className="mb-4 flex items-center justify-center gap-2 p-3 bg-red-950/80 border border-red-500/50 text-xs font-semibold rounded animate-in fade-in slide-in-from-top-2 duration-200">
               <AlertCircleIcon className="w-4 h-4  text-red-400 shrink-0" />
-              <span>{error?.message}</span>
+              <span>Unable to create Try Again</span>
             </div>
           )}
           <div className="m-2 items-center flex flex-wrap justify-end">
@@ -613,7 +613,7 @@ function DeleteCardComponent({
   const [updateStatus, setUpdateStatus] = useState<'success' | 'error' | null>(
     null,
   );
-  const { mutate, error, isPending } = useDeleteFriction();
+  const { mutate, isPending } = useDeleteFriction();
   const handleSave = () => {
     mutate(id, {
       onSuccess: () => {
@@ -656,7 +656,7 @@ function DeleteCardComponent({
         {updateStatus === 'error' && (
           <div className="mb-4 flex items-center justify-center gap-2 p-3 bg-red-950/80 border border-red-500/50 text-xs font-semibold rounded animate-in fade-in slide-in-from-top-2 duration-200">
             <AlertCircleIcon className="w-4 h-4  text-red-400 shrink-0" />
-            <span>{error?.message}</span>
+            <span>Unable to delete Try Again</span>
           </div>
         )}
         <div className="m-2 items-center flex flex-wrap justify-end">
