@@ -15,6 +15,7 @@ import { Route as rootRouteImport } from './routes/__root'
 const IndexLazyRouteImport = createFileRoute('/')()
 const LoginLazyRouteImport = createFileRoute('/login')()
 const RegisterLazyRouteImport = createFileRoute('/register')()
+const SettingLazyRouteImport = createFileRoute('/setting')()
 
 const IndexLazyRoute = IndexLazyRouteImport.update({
   id: '/',
@@ -31,35 +32,44 @@ const RegisterLazyRoute = RegisterLazyRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
+const SettingLazyRoute = SettingLazyRouteImport.update({
+  id: '/setting',
+  path: '/setting',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/setting.lazy').then((d) => d.Route))
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/setting': typeof SettingLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/setting': typeof SettingLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/setting': typeof SettingLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register'
+  fullPaths: '/' | '/login' | '/register' | '/setting'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register'
-  id: '__root__' | '/' | '/login' | '/register'
+  to: '/' | '/login' | '/register' | '/setting'
+  id: '__root__' | '/' | '/login' | '/register' | '/setting'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
+  SettingLazyRoute: typeof SettingLazyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/setting': {
+      id: '/setting'
+      path: '/setting'
+      fullPath: '/setting'
+      preLoaderRoute: typeof SettingLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -92,6 +109,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
+  SettingLazyRoute: SettingLazyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

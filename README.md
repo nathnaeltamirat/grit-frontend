@@ -1,7 +1,7 @@
 # grit-frontend
 React-Frontend APP for Grit — a tool to log developer friction, tag it, and surface recurring patterns with AI-generated summaries.
 
-**Version:** 0.3.0
+**Version:** 0.4.0
 
 ## STACK
 - React -19
@@ -30,8 +30,8 @@ npm run start - To start the app
 - [x] Initial setup (tanstack router,tanstack query, etc)
 - [X] Auth page( sign-in and login)
 - [X] Friction Feed (Friction page , Friction Creator Modal)
+- [X] Settings ()
 - [ ] Insights Feed( Insight Page, Insight deletion Modal,Insight Creator Model)
-- [ ] Settings ()
 - [ ] Initial beta release (v1.0.0-beta)
 - [ ] Initial release (v1.0.0)
 - [ ] Forgot password/reset flow

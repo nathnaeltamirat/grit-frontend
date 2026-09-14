@@ -1,9 +1,12 @@
 import { createContext, type ReactNode, useContext } from 'react';
 import { useSession } from '../api/hooks/useAuth';
+import type SessionTypeResponse from '../types/session.type';
+
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+
 type AuthContextValue = {
-  data: unknown;
+  data: SessionTypeResponse | undefined;
   status: 'loading' | 'anon' | 'authed';
 };
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -25,5 +28,5 @@ export const useAuthContext = () => {
   if (!context) {
     throw new Error('useAuthContext must be used within an AuthProvider');
   }
-  return context
+  return context;
 };
