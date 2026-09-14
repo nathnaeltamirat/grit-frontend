@@ -1,7 +1,7 @@
 # grit-frontend
 React-Frontend APP for Grit — a tool to log developer friction, tag it, and surface recurring patterns with AI-generated summaries.
 
-**Version:** 0.3.0
+**Version:** 0.4.0
 
 ## STACK
 - React -19
