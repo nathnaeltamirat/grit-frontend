@@ -515,7 +515,7 @@ function FrictionLogComponent() {
                   <p>Insights</p>
                 </Link>
                 <Link
-                  to="/settings"
+                  to="/setting"
                   className="flex my-1 p-2 hover:cursor-pointer hover:bg-[#404040] text-white gap-2 items-center justify-content"
                 >
                   <SettingsIcon className="w-10 h-6" />
@@ -551,7 +551,7 @@ function FrictionLogComponent() {
                   <p>Insights</p>
                 </Link>
                 <Link
-                  to="/settings"
+                  to="/setting"
                   className="flex my-1 p-2 hover:cursor-pointer hover:bg-[#404040] text-white gap-2 items-center justify-content"
                 >
                   <SettingsIcon className="w-10 h-6" />
