@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchMe, loginRequest, logoutRequest, signUpRequest } from '../auth';
 import { refreshRequest } from '../client';
+import type SessionTypeResponse from '../../types/session.type';
 
 export function useSession() {
-  return useQuery({
+  return useQuery<SessionTypeResponse>({
     queryKey: ['session'],
     queryFn: async () => {
       await refreshRequest();
