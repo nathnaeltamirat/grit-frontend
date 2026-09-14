@@ -3,6 +3,7 @@ import { loginFormInput, registerFormInput } from '../schema/auth.schema';
 import { apiFetch } from './client';
 import { tokenStore } from './token.store';
 import { ACCESS_TOKEN_TTL_SEC } from './config';
+import type SessionTypeResponse from '../types/session.type';
 interface AuthResponse {
   data: {
     accessToken: string;
@@ -36,7 +37,7 @@ export async function loginRequest(payload: loginFormInput) {
     throw err;
   }
 }
-export async function fetchMe() {
+export async function fetchMe(): Promise<SessionTypeResponse> {
   return apiFetch('/auth/me');
 }
 
