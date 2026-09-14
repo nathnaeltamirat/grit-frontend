@@ -30,8 +30,8 @@ npm run start - To start the app
 - [x] Initial setup (tanstack router,tanstack query, etc)
 - [X] Auth page( sign-in and login)
 - [X] Friction Feed (Friction page , Friction Creator Modal)
+- [X] Settings ()
 - [ ] Insights Feed( Insight Page, Insight deletion Modal,Insight Creator Model)
-- [ ] Settings ()
 - [ ] Initial beta release (v1.0.0-beta)
 - [ ] Initial release (v1.0.0)
 - [ ] Forgot password/reset flow
